@@ -1,0 +1,73 @@
+{% extends 'animal/base.html' %}
+
+
+{% block body %}
+    <div class="animal-container container fluid mt-5">
+        <!---Animals--->
+        <div class="card-deck">
+            {% for animal in animals %}
+                <div class="card">
+                    <div class="card-body">
+                        <h3>{{ animal.name }}</h3>
+
+
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><b>Color: </b>{{ animal.color }}</li>
+                        <li class="list-group-item"><b>Type: </b>{{ animal.type }}</li>
+                    </ul>
+                    <div class="card-body">
+                        <div class="row">
+                            <input type="hidden" name="animal_id" value="{{ animal.id }}"/>
+                            <button class="btn btn-delete btn-danger" data-toggle="modal"
+                                    data-target="#delete-{{ animal.id }}">Delete
+                            </button>
+
+                            <a class="btn btn-default" href="{% url 'animal:update-animal' animal.pk %}">Edit</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="delete-{{ animal.id }}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                Are you sure you want to delete {{ animal.name }}?
+                            </div>
+                            <div class="modal-footer">
+                                <form action="{% url 'animal:delete-animal' animal.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-ok">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            {% empty %}
+                <a>There's nothing in here asshole</a>
+                <button class="btn btn-primary">Add Animal</button>
+            {% endfor %}
+        </div>
+        {% if is_paginated %}
+            <ul class="paginator">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <li></li><a href="/animal?page={{ page_obj.previous_page_number }}">Previous</a></span></li>
+                    {% endif %}
+
+                <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                {% if page_obj.has_next %}
+                    <a href="/animal?page={{ page_obj.next_page_number }}">Next</a>
+                {% endif %}
+                </span>
+            </ul>
+        {% endif %}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'animal/base.html' %}
+
+{% block body %}
+    <div class="m-5">
+        <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <input class="btn btn-outline-success" type="submit"/>
+        </form>
+    </div>
+{% endblock %}
+
+
+<!---
+    <div class="m-5">
+        <form action="" method="post">
+
+            <input type="submit" name="animal_id" value="Update"/>
+        </form>
+    </div>
+--->
